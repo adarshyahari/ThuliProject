@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">ThuliProject</string>
+    <string name="title_activity_user_main">UserMain</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_activity_contractor_main">ContractorMain</string>
+    <string-array name="location_array">
+        <item>Anna Nagar</item>
+        <item>Aminjikarai</item>
+        <item>Arumbakkam</item>
+        <item>T Nagar</item>
+        <item>Adyar</item>
+        <item>Gopalapuram</item>
+        <item>R A Puram</item>
+        <item>Chetpet</item>
+    </string-array>
+</resources>
