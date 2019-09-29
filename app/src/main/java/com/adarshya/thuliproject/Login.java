@@ -23,8 +23,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
     private EditText mEmailField;
     private EditText mPasswordField;
-    private RadioButton mChoiceButton;
-    private RadioGroup mChoiceGroup;
+    public RadioButton mChoiceButton;
+    public RadioGroup mChoiceGroup;
     private Button mLoginButton;
     private TextView mGatewayLink;
     private TextView mForgotPassword;
@@ -81,28 +81,20 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
-                        checkEmailVerification();
-
+                        FirebaseUser firebaseUser = mAuth.getInstance().getCurrentUser();
+                        Boolean emailflag=firebaseUser.isEmailVerified();
+                        if(emailflag==true) {
+                            if (mChoiceButton.getText().toString().trim().equals("Contractor")){
+                                startActivity(new Intent(Login.this, ContractorMain.class));
+                            } else if(mChoiceButton.getText().toString().trim().equals("User")){
+                                startActivity(new Intent(Login.this, UserMain.class));
+                            }
+                        }
                     } else {
                         Toast.makeText(Login.this, "Not successful", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
-        }
-    }
-    private void checkEmailVerification()
-    {
-        FirebaseUser firebaseUser = mAuth.getInstance().getCurrentUser();
-        Boolean emailflag=firebaseUser.isEmailVerified();
-        if(emailflag==true) {
-            if (mChoiceButton.getText().toString().equals("User")){
-                startActivity(new Intent(Login.this, UserMain.class));
-            } else if(mChoiceButton.getText().toString().equals("Contractor")){
-                startActivity(new Intent(Login.this, ContractorMain.class));
-            }
-        }
-        else{
-            Toast.makeText(Login.this, "Verify email", Toast.LENGTH_SHORT).show();
         }
     }
 
