@@ -10,6 +10,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,8 +24,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class UserSignup extends AppCompatActivity implements View.OnClickListener {
 
+public class SignUp extends AppCompatActivity implements View.OnClickListener {
+    private RadioGroup mRadioGroup;
+    private RadioButton mRadioButton;
+    private int radio;
     public EditText mUserNameField;
     public EditText mUserContactField;
     public EditText mUserAddressField;
@@ -32,19 +37,18 @@ public class UserSignup extends AppCompatActivity implements View.OnClickListene
     private EditText mUserPasswordconfirmField;
     private Button mUserSignupButton;
     private TextView mLoginLink;
-    String username, userphno, useraddress, useremail;
+
+    String username, userphno, useraddress, useremail,type;
     String userlocation=" ";
 
     DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_signup);
+        setContentView(R.layout.activity_sign_up);
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -63,6 +67,7 @@ public class UserSignup extends AppCompatActivity implements View.OnClickListene
 
             }
         });
+        mRadioGroup = (RadioGroup) findViewById(R.id.radio_group);
         mUserNameField = (EditText) findViewById(R.id.user_name_field);
         mUserContactField = (EditText) findViewById(R.id.user_contact_field);
         mUserAddressField = (EditText) findViewById(R.id.user_address_field);
@@ -75,15 +80,20 @@ public class UserSignup extends AppCompatActivity implements View.OnClickListene
         mLoginLink.setOnClickListener(this);
         mUserSignupButton.setOnClickListener(this);
     }
-    private void Sign(){
-
+    private void SignUser(){
+        radio = mRadioGroup.getCheckedRadioButtonId();
+        mRadioButton = (RadioButton) findViewById(radio);
+        type= mRadioButton.getText().toString();
         username=mUserNameField.getText().toString().trim();
         userphno=mUserContactField.getText().toString().trim();
         useraddress=mUserAddressField.getText().toString().trim();
         useremail = mUserEmailField.getText().toString().trim();
         String userpassword = mUserPasswordField.getText().toString();
         String usercpassword = mUserPasswordconfirmField.getText().toString();
-        if(username.isEmpty())
+        if(type.isEmpty())
+        {   mRadioGroup.requestFocus();
+        }
+        else if(username.isEmpty())
         {   mUserNameField.setError("Enter Name");
             mUserNameField.requestFocus();
         } else if(userphno.isEmpty())
@@ -106,13 +116,13 @@ public class UserSignup extends AppCompatActivity implements View.OnClickListene
             mUserPasswordField.requestFocus();
         }
         else if(userpassword.equals(usercpassword)){
-            mAuth.createUserWithEmailAndPassword(useremail, userpassword).addOnCompleteListener(UserSignup.this, new OnCompleteListener<AuthResult>() {
+            mAuth.createUserWithEmailAndPassword(useremail, userpassword).addOnCompleteListener(SignUp.this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
                         sendEmailVerification();
                     } else {
-                        Toast.makeText(UserSignup.this, "Not successful", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SignUp.this, "Not successful", Toast.LENGTH_SHORT).show();
                     }
 
                 }
@@ -130,24 +140,31 @@ public class UserSignup extends AppCompatActivity implements View.OnClickListene
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
-                        sendContractorData();
-                        Toast.makeText(UserSignup.this, "Successfully verified ", Toast.LENGTH_SHORT).show();
+                        sendData();
+                        Toast.makeText(SignUp.this, "Successfully verified ", Toast.LENGTH_SHORT).show();
                         finish();
-                        startActivity(new Intent(UserSignup.this, UserMain.class));
+                        if(type.equals("User")){
+                            startActivity(new Intent(SignUp.this, UserMain.class));
+                        }else if(type.equals("Contractor")){
+                            startActivity(new Intent(SignUp.this, ContractorMain.class));
+                        }
+                        else{
+                            Toast.makeText(SignUp.this, "Error", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             });
         }
         else{
-            Toast.makeText(UserSignup.this, "Verify email", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SignUp.this, "Verify email", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void sendContractorData(){
+    private void sendData(){
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference myRef= firebaseDatabase.getReference("user");
-        UserProfile userprofile = new UserProfile(username, userphno, useraddress, userlocation, useremail);
-        myRef.child(mAuth.getUid()).setValue(userprofile);
+        DatabaseReference myRef= firebaseDatabase.getReference(type);
+        Profile profile = new Profile(username, userphno, useraddress, userlocation, useremail, type);
+        myRef.child(mAuth.getUid()).setValue(profile);
     }
 
 
@@ -155,10 +172,10 @@ public class UserSignup extends AppCompatActivity implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.user_signup_button:
-                Sign();
+                SignUser();
                 break;
             case R.id.login_link:{
-                Intent I = new Intent(UserSignup.this, Login.class);
+                Intent I = new Intent(SignUp.this, Login.class);
                 startActivity(I);
                 finish();
             }
@@ -166,3 +183,4 @@ public class UserSignup extends AppCompatActivity implements View.OnClickListene
 
     }
 }
+

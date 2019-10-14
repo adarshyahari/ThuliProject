@@ -67,40 +67,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/choice_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="I am a"
-                        android:textSize="20dp" />
-                    <RadioGroup
-                        android:layout_centerHorizontal="true"
-                        android:layout_below="@id/choice_text"
-                        android:layout_width="wrap_content"
-                        android:id="@+id/choice_group"
-                        android:layout_height="wrap_content">
-                        <RadioButton
-                            android:id="@+id/user_choice"
-                            android:textSize="20dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="User"/>
-                        <RadioButton
-                            android:id="@+id/contractor_choice"
-                            android:textSize="20dp"
-                            android:text="Contractor"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                    </RadioGroup>
-                </LinearLayout>
-                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
@@ -139,7 +105,7 @@
 
 
                     <TextView
-                        android:id="@+id/gateway_link"
+                        android:id="@+id/sign_up_link"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:autoLink="all"

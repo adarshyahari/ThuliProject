@@ -34,16 +34,16 @@ public class ContractorMain extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+
         mLogoutButton = (Button) findViewById(R.id.logout_button);
         mLogoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                finish();
                 FirebaseAuth.getInstance().signOut();
                 Intent I = new Intent(ContractorMain.this, Login.class);
                 startActivity(I);
-                finish();
-
             }
         });
     }

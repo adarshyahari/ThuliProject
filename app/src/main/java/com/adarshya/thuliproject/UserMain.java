@@ -39,12 +39,10 @@ public class UserMain extends AppCompatActivity {
         mLogoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                finish();
                 FirebaseAuth.getInstance().signOut();
                 Intent I = new Intent(UserMain.this, Login.class);
                 startActivity(I);
-                finish();
-
             }
         });
     }
